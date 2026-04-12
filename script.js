@@ -7,40 +7,112 @@ $(function() { // Makes sure that your function is called once all the DOM eleme
     $('.treat-button').click(clickedTreatButton);
     $('.play-button').click(clickedPlayButton);
     $('.exercise-button').click(clickedExerciseButton);
+    $('.sleep-button').click(clickedSleepButton);
   
 
-  
+    // initial greeting (happens only on first click on the pet image)
+    // one() attaches an event handler that is run max 1 time for the specified event
+    $('.pet-image').one('click', function() {
+      message = "Hello! I'm Shadow!";
+      // stop() stops the current animation
+      // text() sets the text of the element to the specified message
+      // css() sets the css property to the one specified in the parantheses
+      // delay() adds a waiting period (a delay, in ms) before the next item in the queue is executed
+      // animate() performs an animation based on css properties (it takes the css to be performed, as well as a time for how long the animation should be)
+      $(".notification").stop(true, true).text(message).css("opacity", "1").delay(1500).animate({ opacity: 0 }, 1500);
+    });
+
+    // on mouse hover, show purr message
+    // on() attaches an event handler than is run every time the specified event occurs
+    $('.pet-image').on('mouseenter', function() {
+      message = "Purr. Purr. Purr.";
+      $(".notification").stop(true, true).text(message).css("opacity", "1");
+    }).on('mouseleave', function() {
+      $(".notification").stop(true, true).animate({ opacity: 0 }, 1500);
+    });
     
   })
   
+    // Create a pet_info object with keys "name", "weight", "happiness" and set initial values.
+    // Set this equal to variable "pet_info"
     // Add a variable "pet_info" equal to a object with the name (string), weight (number), and happiness (number) of your pet
-    var pet_info = {name:"My Pet Name", weight:"??", happiness:"??"};
+    var pet_info = {name: "Shadow", weight: 12, happiness: 8, energy: 3};
+
+    var message = ""; // notification message
   
+   // When your pet receives a treat, add to its happiness and weight. 
     function clickedTreatButton() {
       // Increase pet happiness
+      pet_info.happiness++;
       // Increase pet weight
+      pet_info.weight++;
+      // Increase pet energy
+      pet_info.energy++;
+      // Set message
+      message = "That was so yummy! Can I have 1 more?";
       checkAndUpdatePetInfoInHtml();
     }
     
+    // When your pet plays, add to its happiness and reduce its weight
     function clickedPlayButton() {
       // Increase pet happiness
+      pet_info.happiness++;
       // Decrease pet weight
+      pet_info.weight--;
+      // Decrease pet energy
+      pet_info.energy--;
+      // Set message
+      message = "I'm having so much fun!";
       checkAndUpdatePetInfoInHtml();
     }
     
+    // When your pet exercises, reduce its happiness and weight. 
     function clickedExerciseButton() {
       // Decrease pet happiness
+      pet_info.happiness--;
       // Decrease pet weight
+      pet_info.weight--;
+      // Decrease pet energy
+      pet_info.energy--;
+      // Set message
+      message = "No more, please!";
+      checkAndUpdatePetInfoInHtml();
+    }
+
+    function clickedSleepButton(){
+      // Increase pet energy
+      pet_info.energy++;
+      // Increase pet happiness
+      pet_info.happiness++;
+      // Set message
+      message = "I'm so tired. I could sleep all day!";
       checkAndUpdatePetInfoInHtml();
     }
   
     function checkAndUpdatePetInfoInHtml() {
       checkWeightAndHappinessBeforeUpdating();  
       updatePetInfoInHtml();
+      // stop keeps the animations from stacking if the button is clicked multiple times
+      // the message will fade in and stay visible for 1500 ms
+      // then the message will fade out
+      $(".notification").stop(true, true).text(message).css("opacity", "1").delay(1500).animate({ opacity: 0 }, 1500);
     }
     
+    // Fix key bugs to make sure certain key values can't go below zero. (can use conditional)
     function checkWeightAndHappinessBeforeUpdating() {
       // Add conditional so if weight is lower than zero.
+      // check weight
+      if(pet_info.weight <= 0){
+        pet_info.weight = 0;
+      }
+      // check happiness
+      if(pet_info.happiness <= 0){
+        pet_info.happiness = 0;
+      }
+      // check energy
+      if(pet_info.energy <= 0){
+        pet_info.energy = 0;
+      }
     }
     
     // Updates your HTML with the current values in your pet_info object
@@ -48,5 +120,6 @@ $(function() { // Makes sure that your function is called once all the DOM eleme
       $('.name').text(pet_info['name']);
       $('.weight').text(pet_info['weight']);
       $('.happiness').text(pet_info['happiness']);
+      $('.energy').text(pet_info['energy']);
     }
   

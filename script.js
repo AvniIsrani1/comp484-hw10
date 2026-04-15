@@ -1,5 +1,8 @@
+// original color of the body
+// (will be used for resetting the background color)
+const originalColor = $('body').css('background-color');
+
 $(function() { // Makes sure that your function is called once all the DOM elements of the page are ready to be used.
-    
     // Called function to update the name, happiness, and weight of our pet in our HTML
     checkAndUpdatePetInfoInHtml();
   
@@ -22,13 +25,19 @@ $(function() { // Makes sure that your function is called once all the DOM eleme
       $(".notification").stop(true, true).text(message).css("opacity", "1").delay(1500).animate({ opacity: 0 }, 1500);
     });
 
+    // create Audio object
+    const sound = new Audio('/audio/purr.mp3');
     // on mouse hover, show purr message
     // on() attaches an event handler than is run every time the specified event occurs
     $('.pet-image').on('mouseenter', function() {
       message = "Purr. Purr. Purr.";
+      sound.play();
       $(".notification").stop(true, true).text(message).css("opacity", "1");
     }).on('mouseleave', function() {
       $(".notification").stop(true, true).animate({ opacity: 0 }, 1500);
+      // end sound
+      sound.pause(); // pause sound
+      sound.currentTime = 0; // reset sound file to 0
     });
     
   })
@@ -50,6 +59,7 @@ $(function() { // Makes sure that your function is called once all the DOM eleme
       pet_info.energy++;
       // Set message
       message = "That was so yummy! Can I have 1 more?";
+      changeBackgroundColor('rgba(255, 225, 103, 0.21)');
       checkAndUpdatePetInfoInHtml();
     }
     
@@ -63,6 +73,7 @@ $(function() { // Makes sure that your function is called once all the DOM eleme
       pet_info.energy--;
       // Set message
       message = "I'm having so much fun!";
+      changeBackgroundColor('rgba(156, 255, 166, 0.21)');
       checkAndUpdatePetInfoInHtml();
     }
     
@@ -76,6 +87,7 @@ $(function() { // Makes sure that your function is called once all the DOM eleme
       pet_info.energy--;
       // Set message
       message = "No more, please!";
+      changeBackgroundColor('rgba(87, 87, 87, 0.21)');
       checkAndUpdatePetInfoInHtml();
     }
 
@@ -85,7 +97,8 @@ $(function() { // Makes sure that your function is called once all the DOM eleme
       // Increase pet happiness
       pet_info.happiness++;
       // Set message
-      message = "I'm so tired. I could sleep all day!";
+      message = "zzzzzzzzz...";
+      changeBackgroundColor('rgba(187, 229, 255, 0.21)');
       checkAndUpdatePetInfoInHtml();
     }
   
@@ -102,15 +115,15 @@ $(function() { // Makes sure that your function is called once all the DOM eleme
     function checkWeightAndHappinessBeforeUpdating() {
       // Add conditional so if weight is lower than zero.
       // check weight
-      if(pet_info.weight <= 0){
+      if(pet_info.weight < 0){
         pet_info.weight = 0;
       }
       // check happiness
-      if(pet_info.happiness <= 0){
+      if(pet_info.happiness < 0){
         pet_info.happiness = 0;
       }
       // check energy
-      if(pet_info.energy <= 0){
+      if(pet_info.energy < 0){
         pet_info.energy = 0;
       }
     }
@@ -123,3 +136,14 @@ $(function() { // Makes sure that your function is called once all the DOM eleme
       $('.energy').text(pet_info['energy']);
     }
   
+
+
+    function changeBackgroundColor(newColor){
+      // change background to new color
+      $('body').css('background-color', newColor);
+
+      // wait 3000ms then change background color back to original
+      setTimeout(function() {
+          $('body').css('background-color', originalColor);
+      }, 3000);
+    }

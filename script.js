@@ -3,8 +3,8 @@
 const originalColor = $('body').css('background-color');
 
 // create Audio objects
-const purrSound = new Audio('/audio/purr.mp3');
-const eatSound = new Audio('/audio/eating.mp3');
+const purrSound = new Audio('audio/purr.mp3');
+const eatSound = new Audio('audio/eating.mp3');
 
 $(function() { // Makes sure that your function is called once all the DOM elements of the page are ready to be used.
     // Called function to update the name, happiness, and weight of our pet in our HTML

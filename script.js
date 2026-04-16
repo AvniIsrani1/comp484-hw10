@@ -2,6 +2,10 @@
 // (will be used for resetting the background color)
 const originalColor = $('body').css('background-color');
 
+// create Audio objects
+const purrSound = new Audio('/audio/purr.mp3');
+const eatSound = new Audio('/audio/eating.mp3');
+
 $(function() { // Makes sure that your function is called once all the DOM elements of the page are ready to be used.
     // Called function to update the name, happiness, and weight of our pet in our HTML
     checkAndUpdatePetInfoInHtml();
@@ -25,19 +29,17 @@ $(function() { // Makes sure that your function is called once all the DOM eleme
       $(".notification").stop(true, true).text(message).css("opacity", "1").delay(1500).animate({ opacity: 0 }, 1500);
     });
 
-    // create Audio object
-    const sound = new Audio('/audio/purr.mp3');
     // on mouse hover, show purr message
     // on() attaches an event handler than is run every time the specified event occurs
     $('.pet-image').on('mouseenter', function() {
       message = "Purr. Purr. Purr.";
-      sound.play();
+      purrSound.play();
       $(".notification").stop(true, true).text(message).css("opacity", "1");
     }).on('mouseleave', function() {
       $(".notification").stop(true, true).animate({ opacity: 0 }, 1500);
       // end sound
-      sound.pause(); // pause sound
-      sound.currentTime = 0; // reset sound file to 0
+      purrSound.pause(); // pause sound
+      purrSound.currentTime = 0; // reset sound file to 0
     });
     
   })
@@ -59,6 +61,14 @@ $(function() { // Makes sure that your function is called once all the DOM eleme
       pet_info.energy++;
       // Set message
       message = "That was so yummy! Can I have 1 more?";
+
+      // Play eating sound for 3 seconds
+      eatSound.play();
+      setTimeout(function() {
+        eatSound.pause(); // stop sound
+        eatSound.currentTime = 0; // reset time in sound to 0
+      }, 3000);
+      // change background color to gray (unhappy)
       changeBackgroundColor('rgba(255, 225, 103, 0.21)');
       checkAndUpdatePetInfoInHtml();
     }
@@ -73,6 +83,9 @@ $(function() { // Makes sure that your function is called once all the DOM eleme
       pet_info.energy--;
       // Set message
       message = "I'm having so much fun!";
+
+      $(".toy-image").stop(true, true).animate({ top: "-20px" }, 800).animate({ top: "0px" }, 800).animate({ top: "-20px" }, 800).animate({ top: "0px" }, 800);
+
       changeBackgroundColor('rgba(156, 255, 166, 0.21)');
       checkAndUpdatePetInfoInHtml();
     }
@@ -87,6 +100,11 @@ $(function() { // Makes sure that your function is called once all the DOM eleme
       pet_info.energy--;
       // Set message
       message = "No more, please!";
+
+      $('.pet-image').addClass('shake');
+      setTimeout(function(){
+        $('.pet-image').removeClass('shake');
+      }, 500);
       changeBackgroundColor('rgba(87, 87, 87, 0.21)');
       checkAndUpdatePetInfoInHtml();
     }
@@ -98,6 +116,7 @@ $(function() { // Makes sure that your function is called once all the DOM eleme
       pet_info.happiness++;
       // Set message
       message = "zzzzzzzzz...";
+      $(".pet-image").fadeTo(1500, 0.2).fadeTo(1500, 1);
       changeBackgroundColor('rgba(187, 229, 255, 0.21)');
       checkAndUpdatePetInfoInHtml();
     }
